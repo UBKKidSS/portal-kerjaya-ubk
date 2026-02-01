@@ -135,6 +135,14 @@ th{background:#eef2ff;}
 </head>
 
 <body>
+<section id="semak">
+  <h2>Semak Keputusan Inventori Kerjaya</h2>
+
+  <input type="text" id="namaInput" placeholder="Masukkan nama seperti dalam borang">
+  <button onclick="cari()">Semak</button>
+
+  <div id="result"></div>
+</section>
 
 <header>
 <img src="logo-smk-kidurong.png" alt="Logo SMK Kidurong">
@@ -155,15 +163,6 @@ th{background:#eef2ff;}
 <a href="#ibubapa">Info Ibu Bapa</a>
 <a href="#hubungi">Hubungi UBK</a>
 </nav>
-
- <section id="semak">
-  <h2>Semak Keputusan Inventori Kerjaya</h2>
-
-  <input type="text" id="namaInput" placeholder="Masukkan nama seperti dalam borang">
-  <button onclick="cari()">Semak</button>
-
-  <div id="result"></div>
-</section>
 
 <section id="utama" class="section">
 <h3>Selamat Datang</h3>
@@ -193,16 +192,9 @@ Jawab Inventori Minat Kerjaya
 const CSV_URL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vSub3juftvtY-SxOFoQOid1zuDFcA-8Rqj4wb88bOhzW7Y9b6xl4CmNhhX78OEMwmyk0lxeFZ81cTmc/pub?gid=1321206076&single=true&output=csv";
 
-let dataGlobal = [];
-
-// Muat CSV
-<script>
-const CSV_URL =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vSub3juftvtY-SxOFoQOid1zuDFcA-8Rqj4wb88bOhzW7Y9b6xl4CmNhhX78OEMwmyk0lxeFZ81cTmc/pub?gid=1321206076&single=true&output=csv";
-
 function loadCSV(callback){
 
-  Papa.parse(CSV_URL + "&t=" + new Date().getTime(), { // elak cache
+  Papa.parse(CSV_URL + "&t=" + new Date().getTime(), {
     download: true,
     header: true,
     skipEmptyLines: true,
@@ -252,7 +244,7 @@ function cari(){
 
         resultDiv.innerHTML = `
           <h3>Keputusan Inventori Kerjaya</h3>
-          <p><b>Nama:</b> ${row["Nama"]}</p>
+          <p><b>Nama:</b> ${row[namaKey]}</p>
 
           <ul>
             <li>Realistik: ${row["R"]}</li>
