@@ -190,68 +190,92 @@ Jawab Inventori Minat Kerjaya
 </section>
 
 <script>
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSub3juftvtY-SxOFoQOid1zuDFcA-8Rqj4wb88bOhzW7Y9b6xl4CmNhhX78OEMwmyk0lxeFZ81cTmc/pub?gid=1321206076&single=true&output=csv";
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vSub3juftvtY-SxOFoQOid1zuDFcA-8Rqj4wb88bOhzW7Y9b6xl4CmNhhX78OEMwmyk0lxeFZ81cTmc/pub?gid=1321206076&single=true&output=csv";
 
 let dataGlobal = [];
 
+// Muat CSV
 Papa.parse(CSV_URL, {
   download: true,
   header: true,
   skipEmptyLines: true,
   complete: function(results) {
     dataGlobal = results.data;
-    console.log("CSV loaded:", dataGlobal.length, dataGlobal);
+    console.log("CSV LOADED:", dataGlobal.length);
+    console.log("SAMPLE ROW:", dataGlobal[0]);
   }
 });
 
 function cari() {
-  const nama = document.getElementById("namaInput").value
+
+  const namaInput = document.getElementById("namaInput").value
     .toLowerCase()
     .trim();
-  
+
   const resultDiv = document.getElementById("result");
   resultDiv.innerHTML = "";
 
-  if (!nama) {
+  if (!namaInput) {
     resultDiv.innerHTML = "<p>Sila masukkan nama.</p>";
     return;
   }
 
+  if (!dataGlobal.length) {
+    resultDiv.innerHTML = "<p>⚠️ Data belum dimuat. Sila refresh.</p>";
+    return;
+  }
+
   let found = false;
-  let html = "";
 
   dataGlobal.forEach(row => {
 
-    // cari nama walaupun header berbeza
-    const keys = Object.keys(row);
-    const namaKey = keys.find(k => k.toLowerCase().includes("nama"));
-    if (!namaKey) return;
+    // cari kolum nama
+    const keyNama = Object.keys(row).find(k =>
+      k.toLowerCase().includes("nama")
+    );
 
-    const namaSheet = row[namaKey].toString().toLowerCase().trim();
+    if (!keyNama) return;
 
-    if (namaSheet.includes(nama)) {
+    const namaSheet = row[keyNama]
+      .toString()
+      .toLowerCase()
+      .trim();
+
+    if (namaSheet.includes(namaInput)) {
+
       found = true;
-      html += `
+
+      // fungsi cari nilai ikut keyword header
+      const getVal = (keyword) => {
+        const k = Object.keys(row).find(h =>
+          h.toLowerCase().includes(keyword)
+        );
+        return k ? row[k] : "-";
+      };
+
+      resultDiv.innerHTML = `
         <h3>Keputusan Inventori Kerjaya</h3>
-        <p><b>Nama:</b> ${row[namaKey]}</p>
+        <p><b>Nama:</b> ${row[keyNama]}</p>
+
         <ul>
-          <li>Realistik: ${row["Realistik"] || row["realistik"] || row[keys.find(k => k.toLowerCase().includes("realistik"))]}</li>
-          <li>Investigatif: ${row["Investigatif"] || row[keys.find(k => k.toLowerCase().includes("investigatif"))]}</li>
-          <li>Artistik: ${row["Artistik"] || row[keys.find(k => k.toLowerCase().includes("artistik"))]}</li>
-          <li>Sosial: ${row["Sosial"] || row[keys.find(k => k.toLowerCase().includes("sosial"))]}</li>
-          <li>Enterprising: ${row["Enterprising"] || row[keys.find(k => k.toLowerCase().includes("enterprising"))]}</li>
-          <li>Konvensional: ${row["Konvensional"] || row[keys.find(k => k.toLowerCase().includes("konvensional"))]}</li>
+          <li>Realistik: ${getVal("realistik")}</li>
+          <li>Investigatif: ${getVal("investigatif")}</li>
+          <li>Artistik: ${getVal("artistik")}</li>
+          <li>Sosial: ${getVal("sosial")}</li>
+          <li>Enterprising: ${getVal("enterprising")}</li>
+          <li>Konvensional: ${getVal("konvensional")}</li>
         </ul>
-        <p><b>3 Minat Tertinggi:</b> ${row["Top 3"] || row["Top3"] || row[keys.find(k => k.toLowerCase().includes("top"))]}</p>
+
+        <p><b>3 Minat Tertinggi:</b> ${getVal("top")}</p>
       `;
     }
+
   });
 
   if (!found) {
-    html = "<p>❌ Nama tidak dijumpai.</p>";
+    resultDiv.innerHTML = "<p>❌ Nama tidak dijumpai.</p>";
   }
-
-  resultDiv.innerHTML = html;
 }
 </script>
 
