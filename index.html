@@ -204,6 +204,8 @@ Papa.parse(CSV_URL, {
     dataGlobal = results.data;
     console.log("CSV LOADED:", dataGlobal.length);
     console.log("SAMPLE ROW:", dataGlobal[0]);
+    console.log("HEADERS:", Object.keys(dataGlobal[0]));
+
   }
 });
 
