@@ -156,6 +156,15 @@ th{background:#eef2ff;}
 <a href="#hubungi">Hubungi UBK</a>
 </nav>
 
+ <section id="semak">
+  <h2>Semak Keputusan Inventori Kerjaya</h2>
+
+  <input type="text" id="namaInput" placeholder="Masukkan nama seperti dalam borang">
+  <button onclick="cari()">Semak</button>
+
+  <div id="result"></div>
+</section>
+
 <section id="utama" class="section">
 <h3>Selamat Datang</h3>
 <p>
@@ -180,18 +189,8 @@ Jawab Inventori Minat Kerjaya
 </a>
 </section>
 
-<section id="semak">
-  <h2>Semak Keputusan Inventori Kerjaya</h2>
-
-  <input type="text" id="namaInput" placeholder="Masukkan nama seperti dalam borang">
-  <button onclick="cari()">Semak</button>
-
-  <div id="result"></div>
-</section>
-
 <script>
-const CSV_URL =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vSub3juftvtY-SxOFoQOid1zuDFcA-8Rqj4wb88bOhzW7Y9b6xl4CmNhhX78OEMwmyk0lxeFZ81cTmc/pub?gid=1321206076&single=true&output=csv";
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSub3juftvtY-SxOFoQOid1zuDFcA-8Rqj4wb88bOhzW7Y9b6xl4CmNhhX78OEMwmyk0lxeFZ81cTmc/pub?gid=1321206076&single=true&output=csv";
 
 let dataGlobal = [];
 
@@ -201,54 +200,58 @@ Papa.parse(CSV_URL, {
   skipEmptyLines: true,
   complete: function(results) {
     dataGlobal = results.data;
-    console.log("CSV loaded:", dataGlobal.length);
-    console.log("Contoh baris:", dataGlobal[0]);
+    console.log("CSV loaded:", dataGlobal.length, dataGlobal);
   }
 });
 
-function cari(){
-
+function cari() {
   const nama = document.getElementById("namaInput").value
     .toLowerCase()
     .trim();
-
+  
   const resultDiv = document.getElementById("result");
   resultDiv.innerHTML = "";
 
-  if(!nama){
+  if (!nama) {
     resultDiv.innerHTML = "<p>Sila masukkan nama.</p>";
     return;
   }
 
-  for(let i=0;i<dataGlobal.length;i++){
+  let found = false;
+  let html = "";
 
-    const row = dataGlobal[i];
-    if(!row || !row["Nama"]) continue;
+  dataGlobal.forEach(row => {
 
-    const namaSheet = row["Nama"]
-      .toLowerCase()
-      .trim();
+    // cari nama walaupun header berbeza
+    const keys = Object.keys(row);
+    const namaKey = keys.find(k => k.toLowerCase().includes("nama"));
+    if (!namaKey) return;
 
-    if(namaSheet.includes(nama)){
+    const namaSheet = row[namaKey].toString().toLowerCase().trim();
 
-      resultDiv.innerHTML = `
-        <h3>Keputusan Inventori</h3>
-        <p><b>Nama:</b> ${row["Nama"]}</p>
+    if (namaSheet.includes(nama)) {
+      found = true;
+      html += `
+        <h3>Keputusan Inventori Kerjaya</h3>
+        <p><b>Nama:</b> ${row[namaKey]}</p>
         <ul>
-          <li>Realistik: ${row["Realistik"]}</li>
-          <li>Investigatif: ${row["Investigatif"]}</li>
-          <li>Artistik: ${row["Artistik"]}</li>
-          <li>Sosial: ${row["Sosial"]}</li>
-          <li>Enterprising: ${row["Enterprising"]}</li>
-          <li>Konvensional: ${row["Konvensional"]}</li>
+          <li>Realistik: ${row["Realistik"] || row["realistik"] || row[keys.find(k => k.toLowerCase().includes("realistik"))]}</li>
+          <li>Investigatif: ${row["Investigatif"] || row[keys.find(k => k.toLowerCase().includes("investigatif"))]}</li>
+          <li>Artistik: ${row["Artistik"] || row[keys.find(k => k.toLowerCase().includes("artistik"))]}</li>
+          <li>Sosial: ${row["Sosial"] || row[keys.find(k => k.toLowerCase().includes("sosial"))]}</li>
+          <li>Enterprising: ${row["Enterprising"] || row[keys.find(k => k.toLowerCase().includes("enterprising"))]}</li>
+          <li>Konvensional: ${row["Konvensional"] || row[keys.find(k => k.toLowerCase().includes("konvensional"))]}</li>
         </ul>
-        <p><b>3 Minat Tertinggi:</b> ${row["Top 3"] || row["Top3"]}</p>
+        <p><b>3 Minat Tertinggi:</b> ${row["Top 3"] || row["Top3"] || row[keys.find(k => k.toLowerCase().includes("top"))]}</p>
       `;
-      return;
     }
+  });
+
+  if (!found) {
+    html = "<p>❌ Nama tidak dijumpai.</p>";
   }
 
-  resultDiv.innerHTML = "<p>❌ Nama tidak dijumpai.</p>";
+  resultDiv.innerHTML = html;
 }
 </script>
 
