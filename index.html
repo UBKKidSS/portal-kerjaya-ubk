@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <meta charset="UTF-8">
 <title>Next Gen Career Hub UBK SMK Kidurong</title>
@@ -163,7 +164,7 @@ th{background:#eef2ff;}
 <a href="#perbandingan">Perbandingan IPT</a>
 <a href="#ting5">Tingkatan 5</a>
 <a href="#ibubapa">Info Ibu Bapa</a>
-<a href="#hubungi">Hubungi UBK</a>
+<a href="#guru">Guru BK</a>
 </nav>
 
 <section id="utama" class="section">
@@ -200,6 +201,9 @@ Jawab Inventori Minat Kerjaya
 </section>
 
 <script>
+
+let lastResult = null;
+
 const CSV_URL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vSub3juftvtY-SxOFoQOid1zuDFcA-8Rqj4wb88bOhzW7Y9b6xl4CmNhhX78OEMwmyk0lxeFZ81cTmc/pub?gid=1321206076&single=true&output=csv";
 
@@ -251,6 +255,8 @@ function cari(){
         found = true;
 
         const top3 = row["TOP3"];
+	lastResult = row;
+
 
         resultDiv.innerHTML = `
           <h3>Keputusan Inventori Kerjaya</h3>
@@ -267,7 +273,12 @@ function cari(){
 
           <p><b>3 Minat Tertinggi:</b> ${top3}</p>
 
-          <div id="cadanganUni"></div>
+<div id="cadanganUni"></div>
+
+<br>
+<button onclick="downloadPDF()" class="btn">
+📄 Download PDF Keputusan
+</button>
         `;
 
         paparUniversiti(top3);
@@ -281,19 +292,111 @@ function cari(){
 
   });
 }
+function downloadPDF(){
+
+  if(!lastResult){
+    alert("Sila semak nama dahulu sebelum muat turun PDF.");
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  const logo = "logo-smk-kidurong.png";   // sama seperti website
+
+  const nama = lastResult["Nama"] || "";
+  const R = lastResult["R"];
+  const I = lastResult["I"];
+  const A = lastResult["A"];
+  const S = lastResult["S"];
+  const E = lastResult["E "];
+  const C = lastResult["C"];
+  const TOP3 = lastResult["TOP3"];
+
+  const tarikh = new Date().toLocaleDateString("ms-MY");
+
+  // ===== HEADER =====
+  doc.addImage(logo, "PNG", 20, 12, 25, 25);
+
+  doc.setFontSize(14);
+  doc.text("SEKOLAH MENENGAH KEBANGSAAN KIDURONG", 55, 20);
+
+  doc.setFontSize(12);
+  doc.text("Unit Bimbingan dan Kaunseling (UBK)", 55, 28);
+
+  doc.setFontSize(11);
+  doc.text("Keputusan Inventori Minat Kerjaya (RIASEC)", 55, 36);
+
+  doc.line(20, 42, 190, 42);
+
+  // ===== ISI =====
+  let y = 55;
+
+  doc.setFontSize(12);
+  doc.text(`Nama Murid: ${nama}`, 20, y);
+
+  y += 8;
+  doc.text(`Tarikh Cetakan: ${tarikh}`, 20, y);
+
+  y += 12;
+
+  doc.text(`Realistik     : ${R}`, 20, y);
+  doc.text(`Investigatif  : ${I}`, 20, y+8);
+  doc.text(`Artistik      : ${A}`, 20, y+16);
+  doc.text(`Sosial        : ${S}`, 20, y+24);
+  doc.text(`Enterprising  : ${E}`, 20, y+32);
+  doc.text(`Konvensional  : ${C}`, 20, y+40);
+
+  y += 58;
+
+  doc.setFontSize(13);
+  doc.text(`3 Minat Tertinggi: ${TOP3}`, 20, y);
+
+  y += 15;
+
+  doc.setFontSize(11);
+  doc.text(
+    "Cadangan ini adalah berdasarkan Inventori Minat Kerjaya.\n" +
+    "Sila bincang bersama Guru Bimbingan & Kaunseling untuk tindakan lanjut.",
+    20,
+    y
+  );
+
+  // ===== FOOTER =====
+  doc.setFontSize(10);
+  doc.text(
+    "© Unit Bimbingan dan Kaunseling, SMK Kidurong",
+    105,
+    285,
+    { align: "center" }
+  );
+
+  doc.save(`Keputusan_${nama}.pdf`);
+}
 
 function paparUniversiti(top3){
 
   const map = {
 
-    "Realistik": ["UTM","UMPSA","INTI","UCSI"],
-    "Investigatif": ["UM","USM","Sunway","Monash"],
-    "Artistik": ["UiTM","Taylor’s","Limkokwing"],
-    "Sosial": ["UPSI","UKM","IMU","MAHSA"],
-    "Enterprising": ["UUM","UM","Sunway","MSU"],
-    "Konvensional": ["UPM","HELP","SEGi"]
+  "Realistik": ["UTM","UMPSA","INTI","UCSI",
+                "Politeknik","Kolej Komuniti","GIATMARA","IKMAS","Sarawak Skills"],
 
-  };
+  "Investigatif": ["UM","USM","Sunway","Monash",
+                   "Curtin University Malaysia","Politeknik"],
+
+  "Artistik": ["UiTM","Taylor’s","Limkokwing",
+               "Politeknik","Kolej Komuniti","Sarawak Skills"],
+
+  "Sosial": ["UPSI","UKM","IMU","MAHSA",
+             "Kolej Komuniti","Politeknik"],
+
+  "Enterprising": ["UUM","UM","Sunway","MSU",
+                   "Curtin University Malaysia","GIATMARA"],
+
+  "Konvensional": ["UPM","HELP","SEGi",
+                   "Politeknik","Kolej Komuniti","IKMAS"]
+
+};
 
   let html = "<h4>🎓 Cadangan Universiti Berdasarkan Minat</h4>";
 
@@ -304,6 +407,25 @@ function paparUniversiti(top3){
   });
 
   document.getElementById("cadanganUni").innerHTML = html;
+}
+function filterIPT(cat){
+
+  const items = document.querySelectorAll('[data-cat]');
+
+  items.forEach(el=>{
+
+    if(cat==="all"){
+      el.classList.remove("hide");
+    }else{
+      if(el.dataset.cat.includes(cat)){
+        el.classList.remove("hide");
+      }else{
+        el.classList.add("hide");
+      }
+    }
+
+  });
+
 }
 </script>
 
@@ -334,6 +456,11 @@ dalam sesi kaunseling.
 <li>Universiti Putra Malaysia (UPM)</li>
 <li>Universiti Teknologi Malaysia (UTM)</li>
 <li>Universiti Pendidikan Sultan Idris (UPSI)</li>
+<li>Politeknik Malaysia</li>
+<li>Kolej Komuniti Malaysia</li>
+<li>Sarawak Skills</li>
+<li>GIATMARA</li>
+<li>Institut Kemahiran MARA (IKMAS)</li>
 </ul>
 </section>
 
@@ -346,6 +473,7 @@ dalam sesi kaunseling.
 <li>SEGi University</li>
 <li>Management & Science University (MSU)</li>
 <li>UCSI University</li>
+<li>Curtin University Malaysia</li>
 </ul>
 </section>
 
@@ -354,6 +482,14 @@ dalam sesi kaunseling.
 <!-- ================================================= -->
 
 <section id="padanan-universiti" class="section">
+
+<div class="filter-buttons">
+  <button onclick="filterIPT('all')">Semua</button>
+  <button onclick="filterIPT('awam')">Awam</button>
+  <button onclick="filterIPT('swasta')">Swasta</button>
+  <button onclick="filterIPT('tvet')">TVET</button>
+  <button onclick="filterIPT('sarawak')">Sarawak</button>
+</div>
 
 <h3>Padanan Universiti Awam & Swasta Mengikut Minat (RIASEC)</h3>
 
@@ -366,14 +502,25 @@ contoh kursus serta universiti yang bersesuaian dengan minat kerjaya.
 
 <h4>🔧 REALISTIK (Teknikal / Praktikal)</h4>
 
-<p><b>Universiti Awam:</b>
-<a href="https://www.utm.my" target="_blank">Universiti Teknologi Malaysia (UTM)</a>,
-<a href="https://www.umpsa.edu.my" target="_blank">Universiti Malaysia Pahang Al-Sultan Abdullah (UMPSA)</a>
+<p data-cat="awam">
+<b>Universiti Awam:</b>
+<a href="https://www.utm.my" target="_blank">UTM</a>,
+<a href="https://www.umpsa.edu.my" target="_blank">UMPSA</a>
 </p>
 
-<p><b>Universiti Swasta:</b>
+<p data-cat="swasta">
+<b>Universiti Swasta:</b>
 <a href="https://www.ucsiuniversity.edu.my" target="_blank">UCSI University</a>,
 <a href="https://www.inti.edu.my" target="_blank">INTI International University</a>
+</p>
+
+<p data-cat="tvet sarawak">
+<b>Institusi TVET:</b>
+<a href="https://www.polytechnic.edu.my" target="_blank">Politeknik Malaysia</a>,
+Kolej Komuniti,
+<a href="https://www.giatmara.edu.my" target="_blank">GIATMARA</a>,
+IKMAS,
+Sarawak Skills
 </p>
 
 <p><b>Kursus sesuai:</b> Kejuruteraan Awam, Mekanikal, Elektrik, Automotif, Mekatronik</p>
@@ -383,14 +530,24 @@ contoh kursus serta universiti yang bersesuaian dengan minat kerjaya.
 
 <h4>🔬 INVESTIGATIF (Sains / Analisis)</h4>
 
-<p><b>Universiti Awam:</b>
+<p data-cat="awam">
+<b>Universiti Awam:</b>
 <a href="https://www.um.edu.my" target="_blank">Universiti Malaya (UM)</a>,
 <a href="https://www.usm.my" target="_blank">Universiti Sains Malaysia (USM)</a>
 </p>
 
-<p><b>Universiti Swasta:</b>
+<p data-cat="swasta">
+<b>Universiti Swasta:</b>
 <a href="https://sunway.edu.my/university" target="_blank">Sunway University</a>,
 <a href="https://www.monash.edu.my" target="_blank">Monash University Malaysia</a>
+<a href="https://www.curtin.edu.my" target="_blank">Curtin University Malaysia</a>
+</p>
+
+
+<p data-cat="tvet sarawak">
+<b>Institusi TVET:</b>
+<a href="https://www.polytechnic.edu.my" target="_blank">Politeknik Malaysia</a>
+Politeknik (Sains Gunaan)
 </p>
 
 <p><b>Kursus sesuai:</b> Perubatan, Farmasi, Bioteknologi, Data Sains, Kimia</p>
@@ -400,13 +557,25 @@ contoh kursus serta universiti yang bersesuaian dengan minat kerjaya.
 
 <h4>🎨 ARTISTIK (Kreatif)</h4>
 
-<p><b>Universiti Awam:</b>
+<p data-cat="awam">
+<b>Universiti Awam:</b>
 <a href="https://www.uitm.edu.my" target="_blank">Universiti Teknologi MARA (UiTM)</a>
 </p>
 
-<p><b>Universiti Swasta:</b>
+<p data-cat="swasta">
+<b>Universiti Swasta:</b>
 <a href="https://university.taylors.edu.my" target="_blank">Taylor’s University</a>,
 <a href="https://www.limkokwing.net" target="_blank">Limkokwing University</a>
+</p>
+
+<p data-cat="tvet sarawak">
+<b>Institusi TVET:</b>
+<a href="https://www.polytechnic.edu.my" target="_blank">Politeknik Malaysia</a>
+Politeknik (Reka Bentuk),
+<a href="https://www.kkm.edu.my" target="_blank">Kolej Komuniti Malaysia</a>
+Kolej Komuniti,
+<a href="https://www.sarawakskills.edu.my" target="_blank">Sarawak Skills</a>
+Sarawak Skills
 </p>
 
 <p><b>Kursus sesuai:</b> Multimedia Kreatif, Reka Grafik, Seni Halus, Fesyen, Animasi</p>
@@ -416,14 +585,23 @@ contoh kursus serta universiti yang bersesuaian dengan minat kerjaya.
 
 <h4>🤝 SOSIAL (Pendidikan / Khidmat)</h4>
 
-<p><b>Universiti Awam:</b>
+<p data-cat="awam">
+<b>Universiti Awam:</b>
 <a href="https://www.upsi.edu.my" target="_blank">Universiti Pendidikan Sultan Idris (UPSI)</a>,
 <a href="https://www.ukm.my" target="_blank">Universiti Kebangsaan Malaysia (UKM)</a>
 </p>
 
-<p><b>Universiti Swasta:</b>
+<p data-cat="swasta">
+<b>Universiti Swasta:</b>
 <a href="https://mahsa.edu.my" target="_blank">MAHSA University</a>,
 <a href="https://www.imu.edu.my" target="_blank">IMU University</a>
+</p>
+
+<p data-cat="tvet sarawak">
+<b>Institusi TVET:</b>
+<a href="https://www.kkm.edu.my" target="_blank">Kolej Komuniti Malaysia</a>
+Kolej Komuniti,
+<a href="https://www.polytechnic.edu.my" target="_blank">Politeknik Malaysia</a>, Politeknik (Pendidikan Teknikal)
 </p>
 
 <p><b>Kursus sesuai:</b> Pendidikan, Psikologi, Kejururawatan, Kaunseling</p>
@@ -433,14 +611,23 @@ contoh kursus serta universiti yang bersesuaian dengan minat kerjaya.
 
 <h4>💼 ENTERPRISING (Perniagaan / Kepimpinan)</h4>
 
-<p><b>Universiti Awam:</b>
+<p data-cat="awam">
+<b>Universiti Awam:</b>
 <a href="https://www.uum.edu.my" target="_blank">Universiti Utara Malaysia (UUM)</a>,
 <a href="https://www.um.edu.my" target="_blank">Universiti Malaya (UM)</a>
 </p>
 
-<p><b>Universiti Swasta:</b>
+<p data-cat="swasta">
+<b>Universiti Swasta:</b>
 <a href="https://sunway.edu.my/university" target="_blank">Sunway University</a>,
 <a href="https://www.msu.edu.my" target="_blank">Management & Science University (MSU)</a>
+<a href="https://www.curtin.edu.my" target="_blank">Curtin University Malaysia</a>
+</p>
+
+<p data-cat="tvet sarawak">
+<b>Institusi TVET:</b>
+<a href="https://www.polytechnic.edu.my" target="_blank">Politeknik Malaysia</a>, Politeknik,
+<a href="https://www.giatmara.edu.my" target="_blank">GIATMARA</a>GIATMARA (usahawan teknikal)
 </p>
 
 <p><b>Kursus sesuai:</b> Perniagaan, Keusahawanan, Pemasaran, Undang-undang</p>
@@ -450,13 +637,22 @@ contoh kursus serta universiti yang bersesuaian dengan minat kerjaya.
 
 <h4>📂 KONVENSIONAL (Pentadbiran / Data)</h4>
 
-<p><b>Universiti Awam:</b>
+<p data-cat="awam">
+<b>Universiti Awam:</b>
 <a href="https://www.upm.edu.my" target="_blank">Universiti Putra Malaysia (UPM)</a>
 </p>
 
-<p><b>Universiti Swasta:</b>
+<p data-cat="swasta">
+<b>Universiti Swasta:</b>
 <a href="https://help.edu.my" target="_blank">HELP University</a>,
 <a href="https://www.segi.edu.my" target="_blank">SEGi University</a>
+</p>
+
+<p data-cat="tvet sarawak">
+<b>Institusi TVET:</b>
+<a href="https://www.polytechnic.edu.my" target="_blank">Politeknik Malaysia</a>, Politeknik,
+<a href="https://www.kkm.edu.my" target="_blank">Kolej Komuniti Malaysia</a Kolej Komuniti,
+IKMAS
 </p>
 
 <p><b>Kursus sesuai:</b> Perakaunan, Statistik, Pentadbiran Perniagaan, Sistem Maklumat</p>
@@ -507,7 +703,6 @@ kekuatan akademik dan laluan pengajian.
 </ul>
 </section>
 
-<section id="hubungi" class="section">
 <section id="guru" class="section">
 
 <h3>Guru Bimbingan & Kaunseling</h3>
@@ -553,6 +748,7 @@ kekuatan akademik dan laluan pengajian.
 </div>
 
 </section>
+<section id="hubungi" class="section">
 
 <h3>Hubungi Kami</h3>
 <p>
@@ -564,6 +760,7 @@ SMK Kidurong
 Maklumat murid adalah sulit dan digunakan untuk tujuan
 bimbingan dan kaunseling sahaja.
 </p>
+
 </section>
 
 <footer>
