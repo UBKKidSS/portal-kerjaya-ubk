@@ -13,6 +13,16 @@ font-family:Arial, sans-serif;
 background:#f4f6fb;
 line-height:1.7;
 }
+.guru-card{
+  background:#f1f3f5;   /* kelabu lembut */
+  text-align:center;
+}
+
+.guru-card img{
+  width:120px;
+  border-radius:50%;
+  margin-bottom:10px;
+}
 
 header{
 background:linear-gradient(135deg,#1e3a8a,#2563eb);
@@ -135,14 +145,6 @@ th{background:#eef2ff;}
 </head>
 
 <body>
-<section id="semak">
-  <h2>Semak Keputusan Inventori Kerjaya</h2>
-
-  <input type="text" id="namaInput" placeholder="Masukkan nama seperti dalam borang">
-  <button onclick="cari()">Semak</button>
-
-  <div id="result"></div>
-</section>
 
 <header>
 <img src="logo-smk-kidurong.png" alt="Logo SMK Kidurong">
@@ -188,12 +190,20 @@ Jawab Inventori Minat Kerjaya
 </a>
 </section>
 
+<section id="semak" class="section">
+  <h2>Semak Keputusan Inventori Kerjaya</h2>
+
+  <input type="text" id="namaInput" placeholder="Masukkan nama seperti dalam borang">
+  <button onclick="cari()">Semak</button>
+
+  <div id="result"></div>
+</section>
+
 <script>
 const CSV_URL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vSub3juftvtY-SxOFoQOid1zuDFcA-8Rqj4wb88bOhzW7Y9b6xl4CmNhhX78OEMwmyk0lxeFZ81cTmc/pub?gid=1321206076&single=true&output=csv";
 
 function loadCSV(callback){
-
   Papa.parse(CSV_URL + "&t=" + new Date().getTime(), {
     download: true,
     header: true,
@@ -202,7 +212,6 @@ function loadCSV(callback){
       callback(results.data);
     }
   });
-
 }
 
 function cari(){
@@ -234,13 +243,14 @@ function cari(){
       if(!namaKey) return;
 
       const namaSheet = row[namaKey]
-        .toString()
         .toLowerCase()
         .trim();
 
       if(namaSheet.includes(namaInput)){
 
         found = true;
+
+        const top3 = row["TOP3"];
 
         resultDiv.innerHTML = `
           <h3>Keputusan Inventori Kerjaya</h3>
@@ -255,8 +265,12 @@ function cari(){
             <li>Konvensional: ${row["C"]}</li>
           </ul>
 
-          <p><b>3 Minat Tertinggi:</b> ${row["TOP3"]}</p>
+          <p><b>3 Minat Tertinggi:</b> ${top3}</p>
+
+          <div id="cadanganUni"></div>
         `;
+
+        paparUniversiti(top3);
       }
 
     });
@@ -266,7 +280,30 @@ function cari(){
     }
 
   });
+}
 
+function paparUniversiti(top3){
+
+  const map = {
+
+    "Realistik": ["UTM","UMPSA","INTI","UCSI"],
+    "Investigatif": ["UM","USM","Sunway","Monash"],
+    "Artistik": ["UiTM","Taylor’s","Limkokwing"],
+    "Sosial": ["UPSI","UKM","IMU","MAHSA"],
+    "Enterprising": ["UUM","UM","Sunway","MSU"],
+    "Konvensional": ["UPM","HELP","SEGi"]
+
+  };
+
+  let html = "<h4>🎓 Cadangan Universiti Berdasarkan Minat</h4>";
+
+  Object.keys(map).forEach(k=>{
+    if(top3.includes(k)){
+      html += `<p><b>${k}</b>: ${map[k].join(", ")}</p>`;
+    }
+  });
+
+  document.getElementById("cadanganUni").innerHTML = html;
 }
 </script>
 
@@ -471,6 +508,52 @@ kekuatan akademik dan laluan pengajian.
 </section>
 
 <section id="hubungi" class="section">
+<section id="guru" class="section">
+
+<h3>Guru Bimbingan & Kaunseling</h3>
+
+<div class="grid">
+
+  <div class="card guru-card">
+    <img src="juliani.jpg" alt="Cikgu Juliani">
+    <h4>Cikgu Juliani</h4>
+    <p>Guru Bimbingan & Kaunseling</p>
+  </div>
+
+  <div class="card guru-card">
+    <img src="pennicia.jpg" alt="Cikgu Pennicia">
+    <h4>Cikgu Pennicia</h4>
+    <p>Guru Bimbingan & Kaunseling</p>
+  </div>
+
+  <div class="card guru-card">
+    <img src="dayang.jpg" alt="Cikgu Dayang Ellysha">
+    <h4>Cikgu Dayang Ellysha</h4>
+    <p>Guru Bimbingan & Kaunseling</p>
+  </div>
+
+  <div class="card guru-card">
+    <img src="diana.jpg" alt="Cikgu Diana">
+    <h4>Cikgu Diana</h4>
+    <p>Guru Bimbingan & Kaunseling</p>
+  </div>
+
+  <div class="card guru-card">
+    <img src="norafiza.jpg" alt="Cikgu Nor Afiza">
+    <h4>Cikgu Nor Afiza</h4>
+    <p>Guru Bimbingan & Kaunseling</p>
+  </div>
+
+  <div class="card guru-card">
+    <img src="elfira.jpg" alt="Cikgu Elfira">
+    <h4>Cikgu Elfira</h4>
+    <p>Guru Bimbingan & Kaunseling</p>
+  </div>
+
+</div>
+
+</section>
+
 <h3>Hubungi Kami</h3>
 <p>
 Unit Bimbingan dan Kaunseling<br>
