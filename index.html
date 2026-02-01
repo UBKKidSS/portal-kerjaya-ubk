@@ -257,20 +257,21 @@ function cari() {
       };
 
       resultDiv.innerHTML = `
-        <h3>Keputusan Inventori Kerjaya</h3>
-        <p><b>Nama:</b> ${row[keyNama]}</p>
+  <h3>Keputusan Inventori Kerjaya</h3>
+  <p><b>Nama:</b> ${row["Nama"]}</p>
 
-        <ul>
-          <li>Realistik: ${getVal("realistik")}</li>
-          <li>Investigatif: ${getVal("investigatif")}</li>
-          <li>Artistik: ${getVal("artistik")}</li>
-          <li>Sosial: ${getVal("sosial")}</li>
-          <li>Enterprising: ${getVal("enterprising")}</li>
-          <li>Konvensional: ${getVal("konvensional")}</li>
-        </ul>
+  <ul>
+    <li>Realistik: ${row["R"]}</li>
+    <li>Investigatif: ${row["I"]}</li>
+    <li>Artistik: ${row["A"]}</li>
+    <li>Sosial: ${row["S"]}</li>
+    <li>Enterprising: ${row["E "]}</li>
+    <li>Konvensional: ${row["C"]}</li>
+  </ul>
 
-        <p><b>3 Minat Tertinggi:</b> ${getVal("top")}</p>
-      `;
+  <p><b>3 Minat Tertinggi:</b> ${row["TOP3"]}</p>
+`;
+
     }
 
   });
