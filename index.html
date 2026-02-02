@@ -89,7 +89,7 @@ header{
 
 .guru-card{
   text-align:center;
-  padding:28px 20px 24px;
+  padding:42px 20px 26px;   /* ruang atas lebih besar */
   background:white;
   border-radius:16px;
   box-shadow:0 6px 18px rgba(0,0,0,.08);
@@ -98,9 +98,10 @@ header{
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:center;
+  justify-content:flex-start;   /* bukan center */
 
-min-height:300px;
+  min-height:320px;
+  gap:10px;
 
 }
 
@@ -110,8 +111,9 @@ min-height:300px;
   object-fit:cover;
   border-radius:50%;
   display:block;
-  margin:12px auto 16px;
+  margin-top:0;
 }
+
 .guru-card:hover{
   transform:translateY(-6px);
   box-shadow:0 12px 30px rgba(0,0,0,.15);
