@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<title>Next Gen Career Hub UBK SMK Kidurong</title>
+<title>Edu Career Portal UBK SMK Kidurong</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -226,6 +226,10 @@ background:#ede9fe;
 border-left:5px solid #7c3aed;
 }
 
+.main footer{
+  margin-left:0;
+}
+
 footer{
 background:linear-gradient(135deg,#4c1d95,#6d28d9);
 color:white;
@@ -312,7 +316,7 @@ font-weight:700;
 
 <header>
 <img src="logo-smk-kidurong.png" alt="Logo SMK Kidurong">
-<h1>Next Gen Career Hub</h1>
+<h1>Edu Career Portal</h1>
 <h2>Unit Bimbingan dan Kaunseling<br>SMK Kidurong</h2>
 <p>Membantu Murid Merancang Masa Depan Kerjaya</p>
 </header>
@@ -321,6 +325,7 @@ font-weight:700;
 
 <!-- ===== SIDEBAR ===== -->
 <div class="sidebar">
+
 
   <h3>UBK KidSS</h3>
 
@@ -334,26 +339,29 @@ font-weight:700;
       ☰ Kenali Kerjaya
     </button>
 
-    <div id="submenu">
+   <div id="submenu">
 
-      <a href="#" onclick="showSection('inventori',this)">Inventori</a>
-      <a href="#" onclick="showSection('semak',this)">Semak</a>
-      <a href="#" onclick="showSection('tafsiran',this)">Tafsiran</a>
-      <a href="#" onclick="showSection('awam',this)">Universiti Awam</a>
-      <a href="#" onclick="showSection('swasta',this)">Universiti Swasta</a>
-      <a href="#" onclick="showSection('padanan-universiti',this)">Padanan</a>
-      <a href="#" onclick="showSection('perbandingan',this)">Perbandingan</a>
-      <a href="#" onclick="showSection('ting5',this)">Tingkatan 5</a>
-      <a href="#" onclick="showSection('ibubapa',this)">Ibu Bapa</a>
-          </div>
-
-  </div>
-
-  <!-- HUBUNGI -->
-
-  <a href="#" onclick="showSection('hubungi',this)">📞 Hubungi</a>
+  <a href="#" onclick="showSection('inventori',this)">Inventori</a>
+  <a href="#" onclick="showSection('semak',this)">Semak</a>
+  <a href="#" onclick="showSection('tafsiran',this)">Tafsiran</a>
+  <a href="#" onclick="showSection('awam',this)">Universiti Awam</a>
+  <a href="#" onclick="showSection('swasta',this)">Universiti Swasta</a>
+  <a href="#" onclick="showSection('padanan-universiti',this)">Padanan</a>
+  <a href="#" onclick="showSection('perbandingan',this)">Perbandingan</a>
+  <a href="#" onclick="showSection('ting5',this)">Tingkatan 5</a>
+  <a href="#" onclick="showSection('ibubapa',this)">Ibu Bapa</a>
 
 </div>
+
+</div> <!-- end menu-group -->
+
+<!-- HUBUNGI -->
+<a href="#" onclick="showSection('hubungi',this)">📞 Hubungi</a>
+
+</div> <!-- end sidebar -->
+<div class="main">
+
+
 
 <section id="utama" class="section active">
 <h3>Selamat Datang</h3>
@@ -628,6 +636,7 @@ function toggleSubmenu(){
 <h3>Tafsiran Minat Kerjaya</h3>
 
 <div class="grid">
+
 <div class="card"><b>Realistik</b><br>Teknikal, praktikal, mekanikal</div>
 <div class="card"><b>Investigatif</b><br>Sains, kajian, analisis</div>
 <div class="card"><b>Artistik</b><br>Seni, kreatif, reka bentuk</div>
@@ -893,51 +902,6 @@ kekuatan akademik dan laluan pengajian.
 </ul>
 </section>
 
-<section id="guru" class="section">
-
-<h3>Guru Bimbingan & Kaunseling</h3>
-
-<div class="grid">
-
-  <div class="card guru-card">
-    <img src="juliani.jpg" alt="Cikgu Juliani">
-    <h4>Cikgu Juliani</h4>
-    <p>Guru Bimbingan & Kaunseling</p>
-  </div>
-
-  <div class="card guru-card">
-    <img src="pennicia.jpg" alt="Cikgu Pennicia">
-    <h4>Cikgu Pennicia</h4>
-    <p>Guru Bimbingan & Kaunseling</p>
-  </div>
-
-  <div class="card guru-card">
-    <img src="norafiza.jpg" alt="Cikgu Nor Afiza">
-    <h4>Cikgu Nor Afiza</h4>
-    <p>Guru Bimbingan & Kaunseling</p>
-  </div>
-
-  <div class="card guru-card">
-    <img src="diana.jpg" alt="Cikgu Diana">
-    <h4>Cikgu Diana</h4>
-    <p>Guru Bimbingan & Kaunseling</p>
-  </div>
-
-  <div class="card guru-card">
-    <img src="dayang.jpg" alt="Cikgu Dayang Ellysha">
-    <h4>Cikgu Dayang Ellysha</h4>
-    <p>Guru Bimbingan & Kaunseling</p>
-  </div>
-
-  <div class="card guru-card">
-    <img src="elfira.jpg" alt="Cikgu Elfira">
-    <h4>Cikgu Elfira</h4>
-    <p>Guru Bimbingan & Kaunseling</p>
-  </div>
-
-</div>
-
-</section>
 <section id="hubungi" class="section">
 <hr>
 
@@ -945,9 +909,44 @@ kekuatan akademik dan laluan pengajian.
 
 <div class="grid">
 
-  <!-- copy semua guru-card di sini -->
+  <div class="card guru-card">
+    <img src="juliani.jpg">
+    <h4>Cikgu Juliani</h4>
+    <p>Guru Bimbingan & Kaunseling</p>
+  </div>
+
+  <div class="card guru-card">
+    <img src="pennicia.jpg">
+    <h4>Cikgu Pennicia</h4>
+    <p>Guru Bimbingan & Kaunseling</p>
+  </div>
+
+  <div class="card guru-card">
+    <img src="norafiza.jpg">
+    <h4>Cikgu Nor Afiza</h4>
+    <p>Guru Bimbingan & Kaunseling</p>
+  </div>
+
+  <div class="card guru-card">
+    <img src="diana.jpg">
+    <h4>Cikgu Diana</h4>
+    <p>Guru Bimbingan & Kaunseling</p>
+  </div>
+
+  <div class="card guru-card">
+    <img src="dayang.jpg">
+    <h4>Cikgu Dayang Ellysha</h4>
+    <p>Guru Bimbingan & Kaunseling</p>
+  </div>
+
+  <div class="card guru-card">
+    <img src="elfira.jpg">
+    <h4>Cikgu Elfira</h4>
+    <p>Guru Bimbingan & Kaunseling</p>
+  </div>
 
 </div>
+
 
 <h3>Hubungi Kami</h3>
 <p>
@@ -961,7 +960,6 @@ bimbingan dan kaunseling sahaja.
 </p>
 
 </section>
-
 <footer>
 © Unit Bimbingan dan Kaunseling SMK Kidurong
 </footer>
