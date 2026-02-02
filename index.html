@@ -8,6 +8,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+.section{
+  animation:fadein .4s ease;
+}
+
+@keyframes fadein{
+  from{opacity:0; transform:translateY(10px);}
+  to{opacity:1; transform:none;}
+}
+
+
+.section.active{
+  display:block;
+}
+
 body{
 margin:0;
 font-family:Arial, sans-serif;
@@ -26,22 +40,27 @@ line-height:1.7;
 }
 
 header{
-background:linear-gradient(135deg,#1e3a8a,#2563eb);
+background:linear-gradient(135deg,#6d28d9,#8b5cf6);
 color:white;
 padding:25px;
 text-align:center;
 }
 
-header img{
-width:90px;
-margin-bottom:10px;
-}
-
 nav{
-background:#1e40af;
+background:#4c1d95;
 display:flex;
 justify-content:center;
 flex-wrap:wrap;
+}
+
+nav a.active{
+background:#7c3aed;
+border-radius:8px;
+}
+
+header img{
+width:90px;
+margin-bottom:10px;
 }
 
 nav a{
@@ -51,26 +70,23 @@ text-decoration:none;
 font-weight:bold;
 }
 
-nav a:hover{
-background:#172554;
-}
-
 .section{
 max-width:900px;
 margin:25px auto;
-background:white;
+background:#faf7ff;
 padding:25px;
 border-radius:14px;
 box-shadow:0 5px 15px rgba(0,0,0,.1);
 }
 
 .section h3{
-color:#1e3a8a;
+color:#5b21b6;
+font-weight:700;
 }
 
 .btn{
 display:inline-block;
-background:#16a34a;
+background:linear-gradient(135deg,#22c55e,#16a34a);
 color:white;
 padding:14px 22px;
 border-radius:10px;
@@ -85,7 +101,7 @@ background:#15803d;
 
 .motivasi{
 font-style:italic;
-color:#1e3a8a;
+color:#6d28d9;
 font-weight:bold;
 }
 
@@ -96,16 +112,16 @@ gap:15px;
 }
 
 .card{
-background:#eef2ff;
-padding:15px;
-border-radius:12px;
+background:#ede9fe;
+border-left:5px solid #7c3aed;
 }
 
 footer{
-background:#1e3a8a;
+background:linear-gradient(135deg,#4c1d95,#6d28d9);
 color:white;
 text-align:center;
-padding:15px;
+padding:18px;
+font-weight:600;
 }
 
 .privasi{
@@ -113,17 +129,13 @@ font-size:.9em;
 color:#444;
 }
 .filter-buttons button{
-  padding:8px 14px;
-  border:none;
-  border-radius:8px;
-  background:#2563eb;
+  background:#6d28d9;
   color:white;
-  cursor:pointer;
-  margin:4px;
+  font-weight:600;
 }
 
 .filter-buttons button:hover{
-  background:#1e40af;
+  background:#4c1d95;
 }
 
 .hide{display:none;}
@@ -140,7 +152,11 @@ th,td{
   text-align:left;
 }
 
-th{background:#eef2ff;}
+th{
+background:#ede9fe;
+color:#4c1d95;
+font-weight:700;
+}
 
 </style>
 </head>
@@ -155,19 +171,20 @@ th{background:#eef2ff;}
 </header>
 
 <nav>
-<a href="#utama">Utama</a>
-<a href="#inventori">Inventori</a>
-<a href="#tafsiran">Tafsiran</a>
-<a href="#awam">Universiti Awam</a>
-<a href="#swasta">Universiti Swasta</a>
-<a href="#padanan-universiti">Padanan Kerjaya</a>
-<a href="#perbandingan">Perbandingan IPT</a>
-<a href="#ting5">Tingkatan 5</a>
-<a href="#ibubapa">Info Ibu Bapa</a>
-<a href="#guru">Guru BK</a>
+<a href="javascript:void(0)" onclick="showSection('utama')">Utama</a>
+<a href="javascript:void(0)" onclick="showSection('inventori')">Inventori</a>
+<a href="javascript:void(0)" onclick="showSection('semak')">Semak</a>
+<a href="javascript:void(0)" onclick="showSection('tafsiran')">Tafsiran</a>
+<a href="javascript:void(0)" onclick="showSection('awam')">Universiti Awam</a>
+<a href="javascript:void(0)" onclick="showSection('swasta')">Universiti Swasta</a>
+<a href="javascript:void(0)" onclick="showSection('padanan-universiti')">Padanan Kerjaya</a>
+<a href="javascript:void(0)" onclick="showSection('perbandingan')">Perbandingan IPT</a>
+<a href="javascript:void(0)" onclick="showSection('ting5')">Tingkatan 5</a>
+<a href="javascript:void(0)" onclick="showSection('ibubapa')">Info Ibu Bapa</a>
+<a href="javascript:void(0)" onclick="showSection('guru')">Guru BK</a>
 </nav>
 
-<section id="utama" class="section">
+<section id="utama" class="section active">
 <h3>Selamat Datang</h3>
 <p>
 Portal ini dibangunkan oleh <strong>Unit Bimbingan dan Kaunseling SMK Kidurong</strong>
@@ -761,6 +778,26 @@ bimbingan dan kaunseling sahaja.
 <footer>
 © Unit Bimbingan dan Kaunseling SMK Kidurong
 </footer>
+<script>
+function showSection(id){
+
+  document.querySelectorAll(".section").forEach(sec=>{
+    sec.classList.remove("active");
+  });
+
+  document.querySelectorAll("nav a").forEach(link=>{
+    link.classList.remove("active");
+  });
+
+  const target = document.getElementById(id);
+  if(target){
+    target.classList.add("active");
+    window.scrollTo(0,0);
+  }
+
+  event.target.classList.add("active");
+}
+</script>
 
 </body>
 </html>
