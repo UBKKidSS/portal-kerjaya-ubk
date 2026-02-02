@@ -10,6 +10,43 @@
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
 <style>
+/* ===== HAMBURGER MENU ===== */
+
+.menu-group{
+  margin-top:12px;
+}
+
+.hamburger{
+  width:100%;
+  background:#5b21b6;
+  color:white;
+  border:none;
+  padding:12px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.hamburger:hover{
+  background:#7c3aed;
+}
+
+#submenu{
+  display:none;
+  margin-top:10px;
+  padding-left:8px;
+}
+
+#submenu a{
+  background:#6d28d9;
+  margin-bottom:6px;
+  font-size:.9rem;
+}
+
+/* animasi buka */
+#submenu.show{
+  display:block;
+}
 
 /* ===== RESET ===== */
 body{
@@ -81,10 +118,26 @@ body{
 
 /* ===== HEADER ===== */
 header{
-  background:linear-gradient(135deg,#6d28d9,#8b5cf6);
+  background:
+    linear-gradient(135deg,#5b21b6,#7c3aed),
+    url("https://www.transparenttextures.com/patterns/cubes.png");
+  background-blend-mode:overlay;
   color:white;
-  padding:25px;
+  padding:40px 25px;
   text-align:center;
+  position:relative;
+}
+
+/* ikon latar */
+header::after{
+  content:"🎓 💼 🔬 🎨 📊";
+  position:absolute;
+  bottom:12px;
+  left:50%;
+  transform:translateX(-50%);
+  opacity:.18;
+  font-size:2.2rem;
+  letter-spacing:14px;
 }
 
 .guru-card{
@@ -214,6 +267,43 @@ background:#ede9fe;
 color:#4c1d95;
 font-weight:700;
 }
+@media(max-width:900px){
+
+  .layout{
+    flex-direction:column;
+  }
+
+  .sidebar{
+    position:relative;
+    width:100%;
+    height:auto;
+  }
+
+  .main{
+    margin-left:0;
+    padding:15px;
+  }
+
+  header h1{
+    font-size:1.6rem;
+  }
+
+  header h2{
+    font-size:1.1rem;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .guru-card{
+    min-height:auto;
+  }
+
+  .hamburger{
+    font-size:1rem;
+  }
+}
 
 </style>
 </head>
@@ -231,25 +321,39 @@ font-weight:700;
 
 <!-- ===== SIDEBAR ===== -->
 <div class="sidebar">
+
   <h3>UBK KidSS</h3>
 
-  <a href="#" onclick="showSection('utama',this)" class="active">Utama</a>
-  <a href="#" onclick="showSection('inventori',this)">Inventori</a>
-  <a href="#" onclick="showSection('semak',this)">Semak</a>
-  <a href="#" onclick="showSection('tafsiran',this)">Tafsiran</a>
-  <a href="#" onclick="showSection('awam',this)">Universiti Awam</a>
-  <a href="#" onclick="showSection('swasta',this)">Universiti Swasta</a>
-  <a href="#" onclick="showSection('padanan-universiti',this)">Padanan</a>
-  <a href="#" onclick="showSection('perbandingan',this)">Perbandingan</a>
-  <a href="#" onclick="showSection('ting5',this)">Tingkatan 5</a>
-  <a href="#" onclick="showSection('ibubapa',this)">Ibu Bapa</a>
-  <a href="#" onclick="showSection('guru',this)">Guru BK</a>
+  <!-- MENU UTAMA -->
+  <a href="#" onclick="showSection('utama',this)">🏠 Menu Utama</a>
+
+  <!-- HAMBURGER -->
+  <div class="menu-group">
+
+    <button class="hamburger" onclick="toggleSubmenu()">
+      ☰ Kenali Kerjaya
+    </button>
+
+    <div id="submenu">
+
+      <a href="#" onclick="showSection('inventori',this)">Inventori</a>
+      <a href="#" onclick="showSection('semak',this)">Semak</a>
+      <a href="#" onclick="showSection('tafsiran',this)">Tafsiran</a>
+      <a href="#" onclick="showSection('awam',this)">Universiti Awam</a>
+      <a href="#" onclick="showSection('swasta',this)">Universiti Swasta</a>
+      <a href="#" onclick="showSection('padanan-universiti',this)">Padanan</a>
+      <a href="#" onclick="showSection('perbandingan',this)">Perbandingan</a>
+      <a href="#" onclick="showSection('ting5',this)">Tingkatan 5</a>
+      <a href="#" onclick="showSection('ibubapa',this)">Ibu Bapa</a>
+          </div>
+
+  </div>
+
+  <!-- HUBUNGI -->
+
+  <a href="#" onclick="showSection('hubungi',this)">📞 Hubungi</a>
 
 </div>
-
-<!-- ===== CONTENT ===== -->
-<div class="main">
-
 
 <section id="utama" class="section active">
 <h3>Selamat Datang</h3>
@@ -510,6 +614,13 @@ function filterIPT(cat){
 
   });
 
+}
+</script>
+
+<script>
+function toggleSubmenu(){
+  const submenu = document.getElementById("submenu");
+  submenu.classList.toggle("show");
 }
 </script>
 
@@ -828,6 +939,15 @@ kekuatan akademik dan laluan pengajian.
 
 </section>
 <section id="hubungi" class="section">
+<hr>
+
+<h3>Guru Bimbingan & Kaunseling</h3>
+
+<div class="grid">
+
+  <!-- copy semua guru-card di sini -->
+
+</div>
 
 <h3>Hubungi Kami</h3>
 <p>
@@ -853,12 +973,12 @@ function showSection(id, el){
     sec.style.display="none";
   });
 
-  // buang active sidebar
+  // buang active semua menu
   document.querySelectorAll(".sidebar a").forEach(a=>{
     a.classList.remove("active");
   });
 
-  // show target
+  // show section
   const target=document.getElementById(id);
   if(target){
     target.style.display="block";
@@ -868,6 +988,12 @@ function showSection(id, el){
   // aktifkan menu
   if(el){
     el.classList.add("active");
+  }
+
+  // AUTO TUTUP SUBMENU
+  const submenu=document.getElementById("submenu");
+  if(submenu){
+    submenu.classList.remove("show");
   }
 }
 </script>
