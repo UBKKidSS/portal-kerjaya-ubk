@@ -1,15 +1,31 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
+
+<meta charset="UTF-8">
+<title>Next Gen Career Hub UBK SMK Kidurong</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
 <style>
 
-/* LAYOUT */
+/* ===== RESET ===== */
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#f4f6fb;
+  line-height:1.7;
+}
+
+/* ===== LAYOUT ===== */
 .layout{
   display:flex;
   min-height:100vh;
 }
 
-/* SIDEBAR */
+/* ===== SIDEBAR ===== */
 .sidebar{
   width:230px;
   background:linear-gradient(180deg,#4c1d95,#6d28d9);
@@ -41,21 +57,29 @@
   background:#7c3aed;
 }
 
-/* MAIN */
+/* ===== MAIN ===== */
 .main{
   margin-left:250px;
   padding:20px;
   width:100%;
 }
 
-/* GLOBAL */
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:#f4f6fb;
-  line-height:1.7;
+/* ===== SECTION ===== */
+.section{
+  display:none;
+  max-width:900px;
+  margin:25px auto;
+  background:#faf7ff;
+  padding:25px;
+  border-radius:14px;
+  box-shadow:0 5px 15px rgba(0,0,0,.1);
 }
 
+.section.active{
+  display:block;
+}
+
+/* ===== HEADER ===== */
 header{
   background:linear-gradient(135deg,#6d28d9,#8b5cf6);
   color:white;
@@ -68,104 +92,13 @@ header img{
   margin-bottom:10px;
 }
 
-nav{
-  background:#4c1d95;
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
+/* ===== BUTTON ===== */
+
+.btn:hover{
+  background:#15803d;
 }
 
-nav a{
-  color:white;
-  padding:12px 18px;
-  text-decoration:none;
-  font-weight:bold;
-}
-
-nav a.active{
-  background:#7c3aed;
-  border-radius:8px;
-}
-
-.section{
-  max-width:900px;
-  margin:25px auto;
-  background:#faf7ff;
-  padding:25px;
-  border-radius:14px;
-  box-shadow:0 5px 15px rgba(0,0,0,.1);
-}
-
-.section h3{
-  color:#5b21b6;
-}
-
-.btn{
-  background:linear-gradient(135deg,#22c55e,#16a34a);
-  color:white;
-  padding:14px 22px;
-  border-radius:10px;
-  text-decoration:none;
-  font-weight:bold;
-}
-
-.guru-card{
-  background:#f1f3f5;
-  text-align:center;
-}
-
-.guru-card img{
-  width:120px;
-  border-radius:50%;
-}
-
-</style>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-<meta charset="UTF-8">
-<title>Next Gen Career Hub UBK SMK Kidurong</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-header{
-background:linear-gradient(135deg,#6d28d9,#8b5cf6);
-color:white;
-padding:25px;
-text-align:center;
-}
-
-nav{
-background:#4c1d95;
-display:flex;
-justify-content:center;
-flex-wrap:wrap;
-}
-
-nav a.active{
-background:#7c3aed;
-border-radius:8px;
-}
-
-header img{
-width:90px;
-margin-bottom:10px;
-}
-
-nav a{
-color:white;
-padding:12px 18px;
-text-decoration:none;
-font-weight:bold;
-}
-
-.section{
-max-width:900px;
-margin:25px auto;
-background:#faf7ff;
-padding:25px;
-border-radius:14px;
-box-shadow:0 5px 15px rgba(0,0,0,.1);
-}
+/* ===== FOOTER ===== */
 
 .section h3{
 color:#5b21b6;
@@ -250,49 +183,6 @@ font-weight:700;
 </head>
 
 <body>
-.layout{
-  display:flex;
-  min-height:100vh;
-}
-
-/* SIDEBAR */
-.sidebar{
-  width:230px;
-  background:linear-gradient(180deg,#4c1d95,#6d28d9);
-  color:white;
-  padding:20px;
-  position:fixed;
-  top:0;
-  left:0;
-  bottom:0;
-}
-
-.sidebar h3{
-  text-align:center;
-  margin-bottom:25px;
-}
-
-.sidebar a{
-  display:block;
-  color:white;
-  text-decoration:none;
-  padding:10px 14px;
-  border-radius:8px;
-  margin-bottom:6px;
-  font-weight:600;
-}
-
-.sidebar a:hover,
-.sidebar a.active{
-  background:#7c3aed;
-}
-
-/* CONTENT AREA */
-.main{
-  margin-left:250px;
-  padding:20px;
-  width:100%;
-}
 
 <header>
 <img src="logo-smk-kidurong.png" alt="Logo SMK Kidurong">
@@ -303,8 +193,9 @@ font-weight:700;
 
 <div class="layout">
 
+<!-- ===== SIDEBAR ===== -->
 <div class="sidebar">
-  <h3>🎓 UBK KidSS</h3>
+  <h3>UBK KidSS</h3>
 
   <a href="#" onclick="showSection('utama',this)" class="active">Utama</a>
   <a href="#" onclick="showSection('inventori',this)">Inventori</a>
@@ -312,14 +203,17 @@ font-weight:700;
   <a href="#" onclick="showSection('tafsiran',this)">Tafsiran</a>
   <a href="#" onclick="showSection('awam',this)">Universiti Awam</a>
   <a href="#" onclick="showSection('swasta',this)">Universiti Swasta</a>
-  <a href="#" onclick="showSection('padanan-universiti',this)">Padanan Kerjaya</a>
-  <a href="#" onclick="showSection('perbandingan',this)">Perbandingan IPT</a>
+  <a href="#" onclick="showSection('padanan-universiti',this)">Padanan</a>
+  <a href="#" onclick="showSection('perbandingan',this)">Perbandingan</a>
   <a href="#" onclick="showSection('ting5',this)">Tingkatan 5</a>
-  <a href="#" onclick="showSection('ibubapa',this)">Info Ibu Bapa</a>
+  <a href="#" onclick="showSection('ibubapa',this)">Ibu Bapa</a>
   <a href="#" onclick="showSection('guru',this)">Guru BK</a>
+
 </div>
 
+<!-- ===== CONTENT ===== -->
 <div class="main">
+
 
 <section id="utama" class="section active">
 <h3>Selamat Datang</h3>
@@ -916,20 +810,32 @@ bimbingan dan kaunseling sahaja.
 © Unit Bimbingan dan Kaunseling SMK Kidurong
 </footer>
 <script>
-function showSection(id,el){
+function showSection(id, el){
 
+  // hide semua section
   document.querySelectorAll(".section").forEach(sec=>{
-    sec.classList.remove("active");
+    sec.style.display="none";
   });
 
-  document.querySelectorAll(".sidebar a").forEach(link=>{
-    link.classList.remove("active");
+  // buang active sidebar
+  document.querySelectorAll(".sidebar a").forEach(a=>{
+    a.classList.remove("active");
   });
 
-  document.getElementById(id).classList.add("active");
-  el.classList.add("active");
+  // show target
+  const target=document.getElementById(id);
+  if(target){
+    target.style.display="block";
+    window.scrollTo(0,0);
+  }
+
+  // aktifkan menu
+  if(el){
+    el.classList.add("active");
+  }
 }
 </script>
+
 </div> <!-- end main -->
 </div> <!-- end layout -->
 </body>
