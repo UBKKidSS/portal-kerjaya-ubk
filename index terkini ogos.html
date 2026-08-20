@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+
+<meta charset="UTF-8">
+<title>Edu Career Portal UBK SMK Kidurong</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+<style>
+/* ===== HAMBURGER MENU ===== */
+
+.menu-group{
+  margin-top:12px;
+}
+
+.hamburger{
+  width:100%;
+  background:#5b21b6;
+  color:white;
+  border:none;
+  padding:12px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.hamburger:hover{
+  background:#7c3aed;
+}
+
+#submenu{
+  display:none;
+  margin-top:10px;
+  padding-left:8px;
+}
+
+#submenu a{
+  background:#6d28d9;
+  margin-bottom:6px;
+  font-size:.9rem;
+}
+
+/* animasi buka */
+#submenu.show{
+  display:block;
+}
+
+/* ===== RESET ===== */
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#f4f6fb;
+  line-height:1.7;
+}
+
+/* ===== LAYOUT ===== */
+.layout{
+  display:flex;
+  min-height:100vh;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+  width:230px;
+  background:linear-gradient(180deg,#4c1d95,#6d28d9);
+  color:white;
+  padding:20px;
+  position:fixed;
+  top:0;
+  left:0;
+  bottom:0;
+}
+
+.sidebar h3{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.sidebar a{
+  display:block;
+  color:white;
+  text-decoration:none;
+  padding:10px 14px;
+  border-radius:8px;
+  margin-bottom:6px;
+  font-weight:600;
+}
+
+.sidebar a:hover,
+.sidebar a.active{
+  background:#7c3aed;
+}
+
+/* ===== MAIN ===== */
+.main{
+  margin-left:250px;
+  padding:20px;
+  width:100%;
+}
+
+/* ===== SECTION ===== */
+.section{
+  display:none;
+  max-width:900px;
+  margin:25px auto;
+  background:#faf7ff;
+  padding:25px;
+  border-radius:14px;
+  box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+.section.active{
+  display:block;
+}
+
+/* ===== HEADER ===== */
+header{
+  background:
+    linear-gradient(135deg,#5b21b6,#7c3aed),
+    url("https://www.transparenttextures.com/patterns/cubes.png");
+  background-blend-mode:overlay;
+  color:white;
+  padding:40px 25px;
+  text-align:center;
+  position:relative;
+}
+
+/* ikon latar */
+header::after{
+  content:"🎓 💼 🔬 🎨 📊";
+  position:absolute;
+  bottom:12px;
+  left:50%;
+  transform:translateX(-50%);
+  opacity:.18;
+  font-size:2.2rem;
+  letter-spacing:14px;
+}
+
+.guru-card{
+  text-align:center;
+  padding:40px 20px 28px;
+
+  background:white;
+  border-radius:18px;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+  transition:.25s ease;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  min-height:360px;   /* penting utk center */
+  gap:14px;
+}
+
+
+
+.guru-card img{
+  width:150px;
+  height:180px;          /* lebih tinggi supaya muka tak rapat */
+  object-fit:cover;
+
+  border-radius:14px;   /* segi empat lembut */
+
+  margin-top:10px;
+}
+
+
+.guru-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 12px 30px rgba(0,0,0,.15);
+}
+
+header img{
+  width:90px;
+  margin-bottom:10px;
+}
+
+/* ===== BUTTON ===== */
+
+.btn:hover{
+  background:#15803d;
+}
+
+/* ===== FOOTER ===== */
+
+.section h3{
+color:#5b21b6;
+font-weight:700;
+}
+
+.btn{
+display:inline-block;
+background:linear-gradient(135deg,#22c55e,#16a34a);
+color:white;
+padding:14px 22px;
+border-radius:10px;
+text-decoration:none;
+font-weight:bold;
+margin-top:15px;
+}
+
+.btn:hover{
+background:#15803d;
+}
+
+.motivasi{
+font-style:italic;
+color:#6d28d9;
+font-weight:bold;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+}
+
+.card{
+background:#ede9fe;
+border-left:5px solid #7c3aed;
+}
+
+.main footer{
+  margin-left:0;
+}
+
+footer{
+background:linear-gradient(135deg,#4c1d95,#6d28d9);
+color:white;
+text-align:center;
+padding:18px;
+font-weight:600;
+}
+
+.privasi{
+font-size:.9em;
+color:#444;
+}
+.filter-buttons button{
+  background:#6d28d9;
+  color:white;
+  font-weight:600;
+}
+
+.filter-buttons button:hover{
+  background:#4c1d95;
+}
+
+.hide{display:none;}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:15px;
+}
+
+th,td{
+  border:1px solid #ddd;
+  padding:8px;
+  text-align:left;
+}
+
+th{
+background:#ede9fe;
+color:#4c1d95;
+font-weight:700;
+}
+@media(max-width:900px){
+
+  .layout{
+    flex-direction:column;
+  }
+
+  .sidebar{
+    position:relative;
+    width:100%;
+    height:auto;
+  }
+
+  .main{
+    margin-left:0;
+    padding:15px;
+  }
+
+  header h1{
+    font-size:1.6rem;
+  }
+
+  header h2{
+    font-size:1.1rem;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .guru-card{
+    min-height:auto;
+  }
+
+  .hamburger{
+    font-size:1rem;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<img src="logo-smk-kidurong.png" alt="Logo SMK Kidurong">
+<h1>Edu Career Portal</h1>
+<h2>Unit Bimbingan dan Kaunseling<br>SMK Kidurong</h2>
+<p>Membantu Murid Merancang Masa Depan Kerjaya</p>
+</header>
+
+<div class="layout">
+
+<!-- ===== SIDEBAR ===== -->
+<div class="sidebar">
+
+
+  <h3>UBK KidSS</h3>
+
+  <!-- MENU UTAMA -->
+  <a href="#" onclick="showSection('utama',this)">🏠 Menu Utama</a>
+
+  <!-- HAMBURGER -->
+  <div class="menu-group">
+
+    <button class="hamburger" onclick="toggleSubmenu()">
+      ☰ Kenali Kerjaya
+    </button>
+
+   <div id="submenu">
+
+  <a href="#" onclick="showSection('inventori',this)">Inventori</a>
+  <a href="#" onclick="showSection('semak',this)">Semak</a>
+  <a href="#" onclick="showSection('tafsiran',this)">Tafsiran</a>
+  <a href="#" onclick="showSection('awam',this)">Universiti Awam</a>
+  <a href="#" onclick="showSection('swasta',this)">Universiti Swasta</a>
+  <a href="#" onclick="showSection('padanan-universiti',this)">Padanan</a>
+  <a href="#" onclick="showSection('perbandingan',this)">Perbandingan</a>
+  <a href="#" onclick="showSection('ting5',this)">Tingkatan 5</a>
+  <a href="#" onclick="showSection('ibubapa',this)">Ibu Bapa</a>
+
+</div>
+
+</div> <!-- end menu-group -->
+
+<!-- HUBUNGI -->
+<a href="#" onclick="showSection('hubungi',this)">📞 Hubungi</a>
+
+</div> <!-- end sidebar -->
+<div class="main">
+
+
+
+<section id="utama" class="section active">
+<h3>Selamat Datang</h3>
+<p>
+Portal ini dibangunkan oleh <strong>Unit Bimbingan dan Kaunseling SMK Kidurong</strong>
+untuk membantu murid mengenal pasti minat kerjaya serta merancang hala tuju
+pendidikan dengan lebih jelas dan yakin.
+</p>
+<p class="motivasi">
+“Kenali potensi diri, bina masa depan gemilang.”
+</p>
+</section>
+
+<section id="inventori" class="section">
+<h3>Inventori Minat Kerjaya (RIASEC)</h3>
+<p>
+Klik butang di bawah untuk menjawab Inventori Minat Kerjaya dan kenal pasti
+kecenderungan diri anda.
+</p>
+
+<a class="btn" href="https://forms.gle/bXvvNCSWt9KABG1Y7" target="_blank">
+Jawab Inventori Minat Kerjaya
+</a>
+</section>
+
+<section id="semak" class="section">
+  <h2>Semak Keputusan Inventori Kerjaya</h2>
+
+  <input type="text" id="namaInput" placeholder="Masukkan nama seperti dalam borang">
+  <button onclick="cari()">Semak</button>
+
+  <div id="result"></div>
+</section>
+
+<script>
+
+let lastResult = null;
+
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vSub3juftvtY-SxOFoQOid1zuDFcA-8Rqj4wb88bOhzW7Y9b6xl4CmNhhX78OEMwmyk0lxeFZ81cTmc/pub?gid=1321206076&single=true&output=csv";
+
+function loadCSV(callback){
+  Papa.parse(CSV_URL + "&t=" + new Date().getTime(), {
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function(results) {
+      callback(results.data);
+    }
+  });
+}
+
+function cari(){
+
+  const namaInput = document.getElementById("namaInput").value
+    .toLowerCase()
+    .trim();
+
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = "";
+
+  if(!namaInput){
+    resultDiv.innerHTML = "<p>Sila masukkan nama.</p>";
+    return;
+  }
+
+  loadCSV(function(dataGlobal){
+
+    let found = false;
+
+    dataGlobal.forEach(row => {
+
+      if(!row) return;
+
+      const namaKey = Object.keys(row).find(k =>
+        k.toLowerCase().includes("nama")
+      );
+
+      if(!namaKey) return;
+
+      const namaSheet = row[namaKey]
+        .toLowerCase()
+        .trim();
+
+      if(namaSheet.includes(namaInput)){
+
+        found = true;
+
+        const top3 = row["TOP3"];
+	lastResult = row;
+
+
+        resultDiv.innerHTML = `
+          <h3>Keputusan Inventori Kerjaya</h3>
+          <p><b>Nama:</b> ${row[namaKey]}</p>
+
+          <ul>
+            <li>Realistik: ${row["R"]}</li>
+            <li>Investigatif: ${row["I"]}</li>
+            <li>Artistik: ${row["A"]}</li>
+            <li>Sosial: ${row["S"]}</li>
+            <li>Enterprising: ${row["E "]}</li>
+            <li>Konvensional: ${row["C"]}</li>
+          </ul>
+
+          <p><b>3 Minat Tertinggi:</b> ${top3}</p>
+
+<div id="cadanganUni"></div>
+
+<br>
+<button onclick="downloadPDF()" class="btn">
+📄 Download PDF Keputusan
+</button>
+        `;
+
+        paparUniversiti(top3);
+      }
+
+    });
+
+    if(!found){
+      resultDiv.innerHTML = "<p>❌ Nama tidak dijumpai.</p>";
+    }
+
+  });
+}
+function downloadPDF(){
+
+  if(!lastResult){
+    alert("Sila semak nama dahulu sebelum muat turun PDF.");
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  const logo = "logo-smk-kidurong.png";   // sama seperti website
+
+  const nama = lastResult["Nama"] || "";
+  const R = lastResult["R"];
+  const I = lastResult["I"];
+  const A = lastResult["A"];
+  const S = lastResult["S"];
+  const E = lastResult["E "];
+  const C = lastResult["C"];
+  const TOP3 = lastResult["TOP3"];
+
+  const tarikh = new Date().toLocaleDateString("ms-MY");
+
+  // ===== HEADER =====
+doc.addImage(logo, "PNG", 20, 12, 25, 25);
+
+doc.setFontSize(12);
+doc.text("Unit Bimbingan dan Kaunseling (UBK)", 55, 20);
+
+  doc.setFontSize(12);
+  doc.text("Sekolah Menengah Kebangsaan Kidurong", 55, 28);
+  
+  doc.setFontSize(11);
+  doc.text("Keputusan Inventori Minat Kerjaya (RIASEC)", 55, 36);
+
+  doc.line(20, 42, 190, 42);
+
+  // ===== ISI =====
+  let y = 55;
+
+  doc.setFontSize(12);
+  doc.text(`Nama Murid: ${nama}`, 20, y);
+
+  y += 8;
+  doc.text(`Tarikh Cetakan: ${tarikh}`, 20, y);
+
+  y += 12;
+
+  doc.text(`Realistik     : ${R}`, 20, y);
+  doc.text(`Investigatif  : ${I}`, 20, y+8);
+  doc.text(`Artistik      : ${A}`, 20, y+16);
+  doc.text(`Sosial        : ${S}`, 20, y+24);
+  doc.text(`Enterprising  : ${E}`, 20, y+32);
+  doc.text(`Konvensional  : ${C}`, 20, y+40);
+
+  y += 58;
+
+  doc.setFontSize(13);
+  doc.text(`3 Minat Tertinggi: ${TOP3}`, 20, y);
+
+  y += 15;
+
+  doc.setFontSize(11);
+  doc.text(
+    "Cadangan ini adalah berdasarkan Inventori Minat Kerjaya.\n" +
+    "Sila bincang bersama Guru Bimbingan & Kaunseling untuk tindakan lanjut.",
+    20,
+    y
+  );
+
+  // ===== FOOTER =====
+  doc.setFontSize(10);
+  doc.text(
+    "© Unit Bimbingan dan Kaunseling, SMK Kidurong",
+    105,
+    285,
+    { align: "center" }
+  );
+
+  doc.save(`Keputusan_${nama}.pdf`);
+}
+
+function paparUniversiti(top3){
+
+  const map = {
+
+  "Realistik": ["UTM","UMPSA","INTI","UCSI",
+                "Politeknik","Kolej Komuniti","GIATMARA","IKMAS","Sarawak Skills"],
+
+  "Investigatif": ["UM","USM","Sunway","Monash",
+                   "Curtin University Malaysia","Politeknik"],
+
+  "Artistik": ["UiTM","Taylor’s","Limkokwing",
+               "Politeknik","Kolej Komuniti","Sarawak Skills"],
+
+  "Sosial": ["UPSI","UKM","IMU","MAHSA",
+             "Kolej Komuniti","Politeknik"],
+
+  "Enterprising": ["UUM","UM","Sunway","MSU",
+                   "Curtin University Malaysia","GIATMARA"],
+
+  "Konvensional": ["UPM","HELP","SEGi",
+                   "Politeknik","Kolej Komuniti","IKMAS"]
+
+};
+
+  let html = "<h4>🎓 Cadangan Universiti Berdasarkan Minat</h4>";
+
+  Object.keys(map).forEach(k=>{
+    if(top3.includes(k)){
+      html += `<p><b>${k}</b>: ${map[k].join(", ")}</p>`;
+    }
+  });
+
+  document.getElementById("cadanganUni").innerHTML = html;
+}
+function filterIPT(cat){
+
+  const items = document.querySelectorAll('[data-cat]');
+
+  items.forEach(el=>{
+
+    if(cat==="all"){
+      el.classList.remove("hide");
+    }else{
+      if(el.dataset.cat.includes(cat)){
+        el.classList.remove("hide");
+      }else{
+        el.classList.add("hide");
+      }
+    }
+
+  });
+
+}
+</script>
+
+<script>
+function toggleSubmenu(){
+  const submenu = document.getElementById("submenu");
+  submenu.classList.toggle("show");
+}
+</script>
+
+<section id="tafsiran" class="section">
+<h3>Tafsiran Minat Kerjaya</h3>
+
+<div class="grid">
+
+<div class="card"><b>Realistik</b><br>Individu kategori ini adalah golongan praktikal yang lebih gemar bekerja dengan objek fizikal, alatan, mesin atau hidupan seperti haiwan dan tumbuhan berbanding berinteraksi dengan manusia atau idea abstrak. Mereka memiliki kemahiran mekanikal yang kuat, bersifat berterus-terang dan lebih selesa bekerja di luar bangunan atau dalam persekitaran teknikal yang memerlukan aktiviti fizikal. Antara kursus yang sesuai termasuklah Kejuruteraan Mekanikal, Sains Pertanian dan Teknologi Maklumat (Rangkaian) manakala contoh pekerjaan yang bersesuaian ialah Juruteknik, Juruterbang, Chef dan Petani Moden.</div>
+<div class="card"><b>Investigatif</b><br>Golongan ini merupakan pemikir yang bersifat analitikal, ingin tahu dan sangat gemar menyelesaikan masalah melalui penyelidikan serta logik saintifik. Mereka lebih suka bekerja secara sendirian untuk mengkaji fenomena, mengumpul data dan mencari jawapan kepada persoalan yang kompleks berbanding memujuk atau memimpin orang lain. Kursus yang sering diceburi adalah Sains Tulen (Biologi/Kimia), Perubatan dan Matematik Statistik dengan kerjaya idaman seperti Saintis, Pakar Ekonomi, Penganalisis Data dan Pakar Perubatan.</div>
+<div class="card"><b>Artistik</b><br>Kategori ini merangkumi individu kreatif yang menghargai kebebasan ekspresi diri dan mempunyai daya imaginasi yang tinggi tanpa terikat dengan peraturan atau rutin yang ketat. Mereka biasanya bersifat intuitif, sensitif terhadap keindahan estetika dan lebih suka bekerja dalam persekitaran yang tidak berstruktur untuk menghasilkan karya asli. Pilihan kursus yang tepat adalah Seni Bina, Reka Bentuk Grafik dan Penulisan Kreatif manakala contoh pekerjaan termasuklah Pelukis, Arkitek, Pengarah Kreatif dan Pereka Fesyen.</div>
+<div class="card"><b>Sosial</b><br>Fokus utama individu sosial adalah kebajikan manusia di mana mereka mendapat kepuasan dengan membantu, mengajar, merawat dan memberi khidmat kepada orang lain. Mereka memiliki kemahiran komunikasi dan empati yang sangat tinggi serta lebih gemar bekerja dalam kumpulan untuk menyelesaikan masalah sosial berbanding bekerja dengan mesin atau data. Kursus yang relevan termasuklah Pendidikan (Keguruan), Psikologi dan Sains Kejururawatan dengan contoh pekerjaan seperti Guru, Kaunselor, Jururawat dan Pegawai Sumber Manusia.</div>
+<div class="card"><b>Enterprising</b><br>Golongan ini adalah pemimpin semula jadi yang mempunyai karisma untuk mempengaruh, memujuk dan menguruskan orang lain demi mencapai matlamat organisasi atau keuntungan perniagaan. Mereka berani mengambil risiko, penuh bertenaga dan sangat berminat dengan aktiviti yang melibatkan persaingan serta status sosial. Kursus yang sesuai ialah Pentadbiran Perniagaan, Undang-undang dan Pemasaran manakala contoh pekerjaan yang popular adalah Usahawan, Pengurus Jualan, Peguam dan Ahli Politik.</div>
+<div class="card"><b>Konvensional</b><br>Individu dalam kategori ini adalah pengatur yang sangat teliti, cekap dan menghargai struktur serta peraturan yang jelas dalam menjalankan tugasan. Mereka lebih selesa bekerja dengan data, nombor dan rekod secara sistematik bagi memastikan setiap urusan mengikut prosedur yang ditetapkan tanpa sebarang kesilapan. Antara kursus yang paling sesuai ialah Perakaunan, Sains Perpustakaan dan Pentadbiran Pejabat dengan kerjaya seperti Akauntan, Juruaudit, Pegawai Bank dan Setiausaha Pentadbiran.</div>
+</div>
+
+<p><em>
+Keputusan inventori akan dibincangkan bersama Guru Bimbingan dan Kaunseling
+dalam sesi kaunseling.
+</em></p>
+</section>
+
+<section id="awam" class="section">
+<h3>Universiti Awam Malaysia</h3>
+<ul>
+<li>Universiti Malaya (UM)</li>
+<li>Universiti Kebangsaan Malaysia (UKM)</li>
+<li>Universiti Sains Malaysia (USM)</li>
+<li>Universiti Putra Malaysia (UPM)</li>
+<li>Universiti Teknologi Malaysia (UTM)</li>
+<li>Universiti Pendidikan Sultan Idris (UPSI)</li>
+<li>Politeknik Malaysia</li>
+<li>Kolej Komuniti Malaysia</li>
+<li>Sarawak Skills</li>
+<li>GIATMARA</li>
+<li>Institut Kemahiran MARA (IKMAS)</li>
+</ul>
+</section>
+
+<section id="swasta" class="section">
+<h3>Universiti Swasta Malaysia</h3>
+<ul>
+<li>Taylor’s University</li>
+<li>Sunway University</li>
+<li>INTI International University</li>
+<li>SEGi University</li>
+<li>Management & Science University (MSU)</li>
+<li>UCSI University</li>
+<li>Curtin University Malaysia</li>
+</ul>
+</section>
+
+<!-- ================================================= -->
+<!-- PADANAN UNIVERSITI AWAM & SWASTA MENGIKUT RIASEC -->
+<!-- ================================================= -->
+
+<section id="padanan-universiti" class="section">
+
+<div class="filter-buttons">
+  <button onclick="filterIPT('all')">Semua</button>
+  <button onclick="filterIPT('awam')">Awam</button>
+  <button onclick="filterIPT('swasta')">Swasta</button>
+  <button onclick="filterIPT('tvet')">TVET</button>
+  <button onclick="filterIPT('sarawak')">Sarawak</button>
+</div>
+
+<h3>Padanan Universiti Awam & Swasta Mengikut Minat (RIASEC)</h3>
+
+<p>
+Bahagian ini membantu murid mengenal pasti laluan pengajian,
+contoh kursus serta universiti yang bersesuaian dengan minat kerjaya.
+</p>
+
+<hr>
+
+<h4>🔧 REALISTIK (Teknikal / Praktikal)</h4>
+
+<p data-cat="awam">
+<b>Universiti Awam:</b>
+<a href="https://www.utm.my" target="_blank">UTM</a>,
+<a href="https://www.umpsa.edu.my" target="_blank">UMPSA</a>
+</p>
+
+<p data-cat="swasta">
+<b>Universiti Swasta:</b>
+<a href="https://www.ucsiuniversity.edu.my" target="_blank">UCSI University</a>,
+<a href="https://www.inti.edu.my" target="_blank">INTI International University</a>
+</p>
+
+<p data-cat="tvet sarawak">
+<b>Institusi TVET:</b>
+<a href="https://www.mypolycc.edu.my" target="_blank">Politeknik Malaysia</a>,
+<a href="https://www.mypolycc.edu.my" target="_blank">Kolej Komuniti Malaysia</a>,
+<a href="https://giatmara.edu.my" target="_blank">GIATMARA</a>,
+<a href="https://www.sarawakskills.edu.my" target="_blank">Sarawak Skills</a>,
+IKMAS
+</p>
+
+<p><b>Kursus sesuai:</b> Kejuruteraan Awam, Mekanikal, Elektrik, Automotif, Mekatronik</p>
+<p><b>Syarat am:</b> Lulus SPM, Matematik Tambahan (kejuruteraan), STPM / Asasi / Diploma berkaitan.</p>
+
+<hr>
+
+<h4>🔬 INVESTIGATIF (Sains / Analisis)</h4>
+
+<p data-cat="awam">
+<b>Universiti Awam:</b>
+<a href="https://www.um.edu.my" target="_blank">Universiti Malaya (UM)</a>,
+<a href="https://www.usm.my" target="_blank">Universiti Sains Malaysia (USM)</a>
+</p>
+
+<p data-cat="swasta">
+<b>Universiti Swasta:</b>
+<a href="https://sunway.edu.my/university" target="_blank">Sunway University</a>,
+<a href="https://www.monash.edu.my" target="_blank">Monash University Malaysia</a>
+<a href="https://www.curtin.edu.my" target="_blank">Curtin University Malaysia</a>
+</p>
+
+
+<p data-cat="tvet sarawak">
+<b>Institusi TVET:</b>
+<a href="https://www.mypolycc.edu.my" target="_blank">Politeknik Malaysia</a> (Sains Gunaan)
+</p>
+
+<p><b>Kursus sesuai:</b> Perubatan, Farmasi, Bioteknologi, Data Sains, Kimia</p>
+<p><b>Syarat am:</b> Aliran sains (Kimia penting), PNGK tinggi bagi kursus kompetitif.</p>
+
+<hr>
+
+<h4>🎨 ARTISTIK (Kreatif)</h4>
+
+<p data-cat="awam">
+<b>Universiti Awam:</b>
+<a href="https://www.uitm.edu.my" target="_blank">Universiti Teknologi MARA (UiTM)</a>
+</p>
+
+<p data-cat="swasta">
+<b>Universiti Swasta:</b>
+<a href="https://university.taylors.edu.my" target="_blank">Taylor’s University</a>,
+<a href="https://www.limkokwing.net" target="_blank">Limkokwing University</a>
+</p>
+
+<p data-cat="tvet sarawak">
+<b>Institusi TVET:</b>
+<a href="https://www.mypolycc.edu.my" target="_blank">Politeknik Malaysia</a> (Reka Bentuk),
+<a href="https://www.mypolycc.edu.my" target="_blank">Kolej Komuniti Malaysia</a>,
+<a href="https://www.sarawakskills.edu.my" target="_blank">Sarawak Skills</a>
+</p>
+
+<p><b>Kursus sesuai:</b> Multimedia Kreatif, Reka Grafik, Seni Halus, Fesyen, Animasi</p>
+<p><b>Syarat am:</b> Portfolio (kursus seni), Lulus SPM, Asasi / Diploma berkaitan.</p>
+
+<hr>
+
+<h4>🤝 SOSIAL (Pendidikan / Khidmat)</h4>
+
+<p data-cat="awam">
+<b>Universiti Awam:</b>
+<a href="https://www.upsi.edu.my" target="_blank">Universiti Pendidikan Sultan Idris (UPSI)</a>,
+<a href="https://www.ukm.my" target="_blank">Universiti Kebangsaan Malaysia (UKM)</a>
+</p>
+
+<p data-cat="swasta">
+<b>Universiti Swasta:</b>
+<a href="https://mahsa.edu.my" target="_blank">MAHSA University</a>,
+<a href="https://www.imu.edu.my" target="_blank">IMU University</a>
+</p>
+
+<p data-cat="tvet sarawak">
+<b>Institusi TVET:</b>
+<a href="https://www.mypolycc.edu.my" target="_blank">Kolej Komuniti Malaysia</a>,
+<a href="https://www.mypolycc.edu.my" target="_blank">Politeknik Malaysia</a>, (Pendidikan Teknikal)
+</p>
+
+<p><b>Kursus sesuai:</b> Pendidikan, Psikologi, Kejururawatan, Kaunseling</p>
+<p><b>Syarat am:</b> Temu duga (kesihatan / pendidikan), subjek sains, pra-universiti.</p>
+
+<hr>
+
+<h4>💼 ENTERPRISING (Perniagaan / Kepimpinan)</h4>
+
+<p data-cat="awam">
+<b>Universiti Awam:</b>
+<a href="https://www.uum.edu.my" target="_blank">Universiti Utara Malaysia (UUM)</a>,
+<a href="https://www.um.edu.my" target="_blank">Universiti Malaya (UM)</a>
+</p>
+
+<p data-cat="swasta">
+<b>Universiti Swasta:</b>
+<a href="https://sunway.edu.my/university" target="_blank">Sunway University</a>,
+<a href="https://www.msu.edu.my" target="_blank">Management & Science University (MSU)</a>
+<a href="https://www.curtin.edu.my" target="_blank">Curtin University Malaysia</a>
+</p>
+
+<p data-cat="tvet sarawak">
+<b>Institusi TVET:</b>
+<a href="https://www.mypolycc.edu.my" target="_blank">Politeknik Malaysia</a>, 
+<a href="https://giatmara.edu.my" target="_blank">GIATMARA</a> (usahawan teknikal)
+</p>
+
+<p><b>Kursus sesuai:</b> Perniagaan, Keusahawanan, Pemasaran, Undang-undang</p>
+<p><b>Syarat am:</b> Laluan pra-universiti, Matematik digalakkan.</p>
+
+<hr>
+
+<h4>📂 KONVENSIONAL (Pentadbiran / Data)</h4>
+
+<p data-cat="awam">
+<b>Universiti Awam:</b>
+<a href="https://www.upm.edu.my" target="_blank">Universiti Putra Malaysia (UPM)</a>
+</p>
+
+<p data-cat="swasta">
+<b>Universiti Swasta:</b>
+<a href="https://help.edu.my" target="_blank">HELP University</a>,
+<a href="https://www.segi.edu.my" target="_blank">SEGi University</a>
+</p>
+
+<p data-cat="tvet sarawak">
+<b>Institusi TVET:</b>
+<a href="https://www.mypolycc.edu.my" target="_blank">Politeknik Malaysia</a>,
+<a href="https://www.mypolycc.edu.my" target="_blank">Kolej Komuniti Malaysia</a Kolej Komuniti,
+IKMAS
+</p>
+
+<p><b>Kursus sesuai:</b> Perakaunan, Statistik, Pentadbiran Perniagaan, Sistem Maklumat</p>
+<p><b>Syarat am:</b> Matematik penting, STPM / Asasi / Diploma setara.</p>
+
+<p><em>
+Nota: Maklumat kursus dan syarat kemasukan tertakluk kepada perubahan semasa universiti.
+Murid digalakkan berbincang bersama Guru Bimbingan dan Kaunseling sebelum membuat
+permohonan rasmi.
+</em></p>
+
+</section>
+
+<section id="perbandingan" class="section">
+
+<h3>Perbandingan Universiti Awam vs Swasta</h3>
+
+<table>
+<tr><th>Kategori</th><th>Awam</th><th>Swasta</th></tr>
+<tr><td>Yuran</td><td>Lebih rendah</td><td>Lebih tinggi</td></tr>
+<tr><td>Kemasukan</td><td>Kompetitif</td><td>Lebih fleksibel</td></tr>
+<tr><td>Biasiswa</td><td>Banyak</td><td>Terhad</td></tr>
+</table>
+
+</section>
+
+<section id="ting5" class="section">
+<h3>Maklumat Khas Tingkatan 5</h3>
+<ul>
+<li>Tarikh UPU & permohonan IPT</li>
+<li>Program asasi / matrikulasi</li>
+<li>Hari kerjaya sekolah</li>
+<li>Sesi kaunseling individu</li>
+</ul>
+</section>
+
+<section id="ibubapa" class="section">
+<h3>Maklumat Untuk Ibu Bapa</h3>
+<p>
+Ibu bapa digalakkan berbincang dengan anak tentang minat,
+kekuatan akademik dan laluan pengajian.
+</p>
+
+<ul>
+<li>Galakkan anak kenal potensi diri</li>
+<li>Rujuk UBK sebelum buat keputusan</li>
+<li>Sokongan emosi penting</li>
+</ul>
+</section>
+
+<section id="hubungi" class="section">
+<hr>
+
+<h3>Guru Bimbingan & Kaunseling</h3>
+
+<div class="grid">
+
+  <div class="card guru-card">
+    <img src="juliani.jpg">
+    <h4>Cikgu Juliani binti Zulkifli</h4>
+    <p>Guru Bimbingan & Kaunseling</p>
+  </div>
+
+  <div class="card guru-card">
+    <img src="pennicia.jpg">
+    <h4>Cikgu Pennicia Pen Avit</h4>
+    <p>Guru Bimbingan & Kaunseling</p>
+  </div>
+
+  <div class="card guru-card">
+    <img src="norafiza.jpg">
+    <h4>Cikgu Nor Afiza binti Abdul Rani</h4>
+    <p>Guru Bimbingan & Kaunseling</p>
+  </div>
+
+  <div class="card guru-card">
+    <img src="diana.jpg">
+    <h4>Cikgu Diana Eba anak Awos</h4>
+    <p>Guru Bimbingan & Kaunseling</p>
+  </div>
+
+  <div class="card guru-card">
+    <img src="dayang.jpg">
+    <h4>Cikgu Dayang Ellysha Ezrein binti Abang Noran</h4>
+    <p>Guru Bimbingan & Kaunseling</p>
+  </div>
+
+
+</div>
+
+
+<h3>Hubungi Kami</h3>
+<p>
+Unit Bimbingan dan Kaunseling<br>
+SMK Kidurong
+</p>
+
+<p class="privasi">
+Maklumat murid adalah sulit dan digunakan untuk tujuan
+bimbingan dan kaunseling sahaja.
+</p>
+
+</section>
+<footer>
+© Unit Bimbingan dan Kaunseling SMK Kidurong
+</footer>
+<script>
+function showSection(id, el){
+
+  // hide semua section
+  document.querySelectorAll(".section").forEach(sec=>{
+    sec.style.display="none";
+  });
+
+  // buang active semua menu
+  document.querySelectorAll(".sidebar a").forEach(a=>{
+    a.classList.remove("active");
+  });
+
+  // show section
+  const target=document.getElementById(id);
+  if(target){
+    target.style.display="block";
+    window.scrollTo(0,0);
+  }
+
+  // aktifkan menu
+  if(el){
+    el.classList.add("active");
+  }
+
+  // AUTO TUTUP SUBMENU
+  const submenu=document.getElementById("submenu");
+  if(submenu){
+    submenu.classList.remove("show");
+  }
+}
+</script>
+
+</div> <!-- end main -->
+</div> <!-- end layout -->
+<div id="visitorBox"
+style="
+background:#ede9fe;
+padding:15px;
+margin:20px auto;
+border-radius:10px;
+text-align:center;
+font-size:18px;
+font-weight:bold;
+color:#4c1d95;
+max-width:350px;">
+👥 Jumlah Pelawat:
+<span id="visitorCount">...</span>
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbwTGxwOQU7-zvuk3h-BMTX5HqzhPO0BPrpMA1bMvQz4-9734y1Cmx_zmTri9YgHZNo/exec";
+
+fetch(API_URL)
+.then(res => res.json())
+.then(data=>{
+    document.getElementById("visitorCount").innerText = data.count;
+})
+.catch(()=>{
+    document.getElementById("visitorCount").innerText = "Tidak dapat dipaparkan";
+});
+</script>
+</body>
+</html>
